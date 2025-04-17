@@ -114,8 +114,8 @@ const { request: _request, error: _error } = useFetcher();
                  );
  
                  if (!result) {
-                     toast(error || '上传图片失败', 'error');
-                     throw Error(error || '上传图片失败');
+                     toast(_error || '上传图片失败', 'error');
+                     throw Error(_error || '上传图片失败');
                  }
  
                  toast('图片上传成功', 'success');
