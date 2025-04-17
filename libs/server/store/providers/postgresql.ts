@@ -107,7 +107,7 @@ export class StorePostgreSQL extends StoreProvider {
         });
     }
 
-    async getSignUrl(path: string, expires = 600): Promise<string | null> {
+    async getSignUrl(path: string, _expires = 600): Promise<string | null> {
         // PostgreSQL implementation doesn't need signed URLs
         // Return a direct path to the API endpoint that will serve the content
         return `/api/object/${encodeURIComponent(this.getPath(path))}`;
