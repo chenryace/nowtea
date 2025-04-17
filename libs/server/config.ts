@@ -318,7 +318,7 @@ export function loadConfigAndListErrors(): {
 }
 
 const MAX_ERRORS = 2;
-export function loadConfig() {
+export function loadConfig(): Configuration {
     const result = loadConfigAndListErrors();
 
     if (!result.config) {
@@ -346,5 +346,5 @@ export function config(): Configuration {
         logger.debug('Successfully loaded configuration');
     }
 
-    return loaded;
+    return loaded!; // 添加非空断言操作符
 }
