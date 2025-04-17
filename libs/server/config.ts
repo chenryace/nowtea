@@ -30,6 +30,7 @@ export type AuthConfiguration = { type: 'none' } | BasicAuthConfiguration;
 export interface PostgreSQLStoreConfiguration {
     connectionString: string;
     prefix: string;
+    proxyAttachments?: boolean;
 }
 
 export type StoreConfiguration = PostgreSQLStoreConfiguration;

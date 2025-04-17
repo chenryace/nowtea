@@ -76,7 +76,7 @@ const { request: _request, error: _error } = useFetcher();
             const result = await createNoteWithTitle(title);
 
             if (!result) {
-                throw new ('todo');
+                throw new Error('todo');
             }
 
             return `/${result.id}`;
