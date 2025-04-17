@@ -5,7 +5,6 @@ import {
     MouseEvent as ReactMouseEvent,
     useState,
     useRef,
-    useEffect, 
 } from 'react';
 import { searchNote, searchRangeText } from 'libs/web/utils/search';
 import useFetcher from 'libs/web/api/fetcher';
@@ -106,7 +105,7 @@ const { request: _request, error: _error } = useFetcher();
  
                  toast('正在上传图片...', 'info');
  
-                 const result = await request<FormData, { url: string }>(
+                 const result = await _request<FormData, { url: string }>(
                      {
                          method: 'POST',
                          url: `/api/upload?id=${id}`,
