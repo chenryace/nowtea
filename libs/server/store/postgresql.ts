@@ -119,7 +119,8 @@ export class StorePostgreSQL extends StoreProvider {
                 'SELECT 1 FROM objects WHERE path = $1',
                 [this.getPath(path)]
             );
-            return result.rowCount > 0;
+            // 添加非空断言
+            return result!.rowCount > 0;
         });
     }
 
@@ -130,11 +131,11 @@ export class StorePostgreSQL extends StoreProvider {
                 [this.getPath(path)]
             );
             
-            if (result.rowCount === 0) {
+            if (result!.rowCount === 0) {
                 return undefined;
             }
             
-            const { content, is_compressed } = result.rows[0];
+            const { content, is_compressed } = result!.rows[0];
             return toStr(content, is_compressed || isCompressed);
         });
     }
@@ -146,12 +147,12 @@ export class StorePostgreSQL extends StoreProvider {
                 [this.getPath(path)]
             );
             
-            if (result.rowCount === 0) {
+            if (result!.rowCount === 0) {
                 return undefined;
             }
             
             const meta: { [key: string]: string } = {};
-            for (const row of result.rows) {
+            for (const row of result!.rows) {
                 meta[row.key] = row.value;
             }
             
@@ -174,11 +175,11 @@ export class StorePostgreSQL extends StoreProvider {
                 [this.getPath(path)]
             );
             
-            if (objectResult.rowCount === 0) {
+            if (objectResult!.rowCount === 0) {
                 return {};
             }
             
-            const { content, is_compressed } = objectResult.rows[0];
+            const { content, is_compressed } = objectResult!.rows[0];
             
             const metaResult = await client.query(
                 'SELECT key, value FROM object_metadata WHERE path = $1',
@@ -186,7 +187,7 @@ export class StorePostgreSQL extends StoreProvider {
             );
             
             const meta: { [key: string]: string } = {};
-            for (const row of metaResult.rows) {
+            for (const row of metaResult!.rows) {
                 meta[row.key] = row.value;
             }
             
@@ -195,7 +196,7 @@ export class StorePostgreSQL extends StoreProvider {
                 [this.getPath(path)]
             );
             
-            const contentType = headerResult.rowCount > 0 ? headerResult.rows[0].content_type : undefined;
+            const contentType = headerResult!.rowCount > 0 ? headerResult!.rows[0].content_type : undefined;
             
             return {
                 content: toStr(content, is_compressed || isCompressed),
@@ -276,11 +277,11 @@ export class StorePostgreSQL extends StoreProvider {
                 [sourceFullPath]
             );
             
-            if (objectResult.rowCount === 0) {
+            if (objectResult!.rowCount === 0) {
                 throw new Error(`Source object not found: ${fromPath}`);
             }
             
-            const { content, is_compressed } = objectResult.rows[0];
+            const { content, is_compressed } = objectResult!.rows[0];
             
             // Insert or update the target object
             await client.query(
@@ -303,7 +304,7 @@ export class StorePostgreSQL extends StoreProvider {
                 await client.query('DELETE FROM object_metadata WHERE path = $1', [targetFullPath]);
                 
                 // Copy metadata to target
-                for (const row of metaResult.rows) {
+                for (const row of metaResult!.rows) {
                     await client.query(
                         'INSERT INTO object_metadata (path, key, value) VALUES ($1, $2, $3)',
                         [targetFullPath, row.key, row.value]
@@ -346,8 +347,8 @@ export class StorePostgreSQL extends StoreProvider {
                     [sourceFullPath]
                 );
                 
-                if (headerResult.rowCount > 0) {
-                    const { content_type, cache_control, content_disposition, content_encoding } = headerResult.rows[0];
+                if (headerResult!.rowCount > 0) {
+                    const { content_type, cache_control, content_disposition, content_encoding } = headerResult!.rows[0];
                     
                     await client.query(
                         `INSERT INTO object_headers (path, content_type, cache_control, content_disposition, content_encoding)
