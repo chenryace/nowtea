@@ -114,14 +114,16 @@ export class StorePostgreSQL extends StoreProvider {
     }
 
     async hasObject(path: string): Promise<boolean> {
-        return this.withClient(async (client) => {
-            const result = await client.query(
+        try {
+            const result = await this.pool.query(
                 'SELECT 1 FROM objects WHERE path = $1',
                 [this.getPath(path)]
             );
-            // 添加非空断言
-            return result!.rowCount > 0;
-        });
+            return result.rowCount > 0;
+        } catch (err) {
+            this.logger.error(err, '检查对象是否存在失败: %s', path);
+            return false;
+        }
     }
 
     async getObject(path: string, isCompressed = false): Promise<string | undefined> {
