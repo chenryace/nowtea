@@ -76,7 +76,7 @@ const { request: _request, error: _error } = useFetcher();
             const result = await createNoteWithTitle(title);
 
             if (!result) {
-                throw new Error('todo');
+                throw new ('todo');
             }
 
             return `/${result.id}`;
@@ -126,7 +126,7 @@ const { request: _request, error: _error } = useFetcher();
                  throw err;
              }
          },
-         [error, request, toast]
+         [_error, _request, toast]
      );
 
     const { preview, linkToolbar } = PortalState.useContainer();
